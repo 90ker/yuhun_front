@@ -15,7 +15,7 @@
         >御魂推荐器</el-menu-item
       >
       <el-menu-item
-        v-if="gameShot"
+        v-if="gameShot.name"
         index="1"
         style="
           font-weight: 700;
@@ -26,7 +26,7 @@
           white-space: nowrap;
           width: 200px;
         "
-        >{{ gameShot }}</el-menu-item
+        >{{ gameShot.name || ''}}</el-menu-item
       >
       <el-menu-item
         v-if="!user"
@@ -168,7 +168,6 @@ export default {
       activeName: "login",
       changePass: false,
       login: false,
-      gameShot:sessionStorage.getItem("gameShot"),
       loginForm: {
         username: "",
         password: "",
@@ -202,7 +201,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["user"]),
+    ...mapState(["user","gameShot"]),
   },
   methods: {
     ...mapMutations(["setUser"]),
@@ -224,7 +223,9 @@ export default {
             this.$message.success("登陆成功");
             this.login = false;
             this.setUser(params);
-            this.$router.push("/import");
+            if (this.$route.path != "/import") {
+              this.$router.push("/import");
+            }
           });
       } else if (formName == "registryForm") {
         let params = {
@@ -240,7 +241,9 @@ export default {
             this.$message.success("注册成功");
             this.login = false;
             this.setUser(params);
-            this.$router.push("/import");
+            if (this.$route.path != "/import") {
+              this.$router.push("/import");
+            }
           });
       } else {
         let params = {
@@ -266,11 +269,11 @@ export default {
   },
   created() {
     window.addEventListener("beforeunload", () => {
-      let username = sessionStorage.getItem('username')
-      sessionStorage.removeItem("gameShot")
-      if(!username) return;
-      sessionStorage.removeItem("username")
-      
+      let username = sessionStorage.getItem("username");
+      sessionStorage.removeItem("gameShot");
+      if (!username) return;
+      sessionStorage.removeItem("username");
+
       return this.$axios.get(
         `http://localhost:8080/common/deleteTemp/${username}`
       );
