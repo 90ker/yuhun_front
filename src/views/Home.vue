@@ -12,7 +12,7 @@
         >收藏</el-menu-item
       >
       <el-menu-item index="3" @click="go('/home/heroData')">式神数据</el-menu-item>
-      <el-menu-item index="4" @click="go('/home/soulData')">御魂数据</el-menu-item>
+      <el-menu-item index="4" @click="go('/home/yuhunData')">御魂数据</el-menu-item>
     </el-menu>
     <router-view />
   </div>

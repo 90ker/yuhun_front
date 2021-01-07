@@ -5,7 +5,7 @@ import Import from '../views/Import.vue'
 import Caculator from '../views/Caculator.vue'
 import Collection from '../views/Collection.vue'
 import HeroData from '../views/HeroData.vue'
-import SoulData from '../views/SoulData.vue'
+import YuhunData from '../views/YuhunData.vue'
 import Home from '../views/Home.vue'
 
 
@@ -30,8 +30,8 @@ const routes = [
         component: HeroData
       },
       {
-        path: 'soulData',
-        component: SoulData
+        path: 'yuhunData',
+        component: YuhunData
       },
       {
         path: 'collection',

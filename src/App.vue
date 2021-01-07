@@ -26,7 +26,7 @@
           white-space: nowrap;
           width: 200px;
         "
-        >{{ gameShot.name || ''}}</el-menu-item
+        >{{ gameShot.name || "" }}</el-menu-item
       >
       <el-menu-item
         v-if="!user"
@@ -201,7 +201,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["user","gameShot"]),
+    ...mapState(["user", "gameShot"]),
   },
   methods: {
     ...mapMutations(["setUser"]),

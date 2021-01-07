@@ -30,7 +30,7 @@
             icon="el-icon-delete"
             circle
             style="position: absolute; right: 0; bottom: 0"
-            @click="deleteGameShot(item.name)"
+            @click.stop="deleteGameShot(item.name)"
           ></el-button>
           <img
             :src="`http://localhost:8080/png/hero/${item.pic}.png`"

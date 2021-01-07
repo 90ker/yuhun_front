@@ -6,7 +6,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     gameShot: '',
-    user: ''
+    user: '',
+    heroId:''
   },
   mutations: {
     setGameShot(state, gameShot) {
@@ -14,6 +15,9 @@ export default new Vuex.Store({
     },
     setUser(state, user) {
       state.user = user
+    },
+    setHeroId(state,heroId){
+      state.heroId = heroId
     }
   },
   actions: {},
