@@ -4,7 +4,7 @@
       <el-tag :key="index" v-if="item.name">{{ item.name }}</el-tag>
     </template>
 
-    <el-button v-popover:popover>自定义</el-button
+    <el-button v-popover:popover trigger="manual">自定义</el-button
     ><el-popover
       ref="popover"
       placement="bottom"
@@ -19,12 +19,13 @@
               v-model="excludeList"
               :max="5"
               @change="changeExclude"
-            >
-              <el-checkbox
-                v-for="(item, index) in excludeOptions"
-                :key="index"
-                :label="item.value"
-                >{{ item.name }}</el-checkbox
+              ><template v-for="(item, index) in includeList"
+                ><el-checkbox
+                  v-if="!item.entity"
+                  :key="index"
+                  :label="item.value"
+                  >{{ item.name }}</el-checkbox
+                ></template
               >
             </el-checkbox-group>
           </el-form-item>
@@ -47,19 +48,20 @@
             </el-checkbox-group>
             <el-row
               v-show="starRadio == 2"
-              v-for="(item, index) in includeListView"
+              v-for="(item, index) in includeList"
               :key="index"
-            >
-              <el-col :span="4">{{ item.name }}</el-col>
-              <el-col :span="20"
-                ><el-checkbox-group v-model="item.star">
-                  <el-checkbox
-                    v-for="(item, index) in yuhunStarOptions"
-                    :key="index"
-                    :label="item.value"
-                    >{{ item.name }}</el-checkbox
-                  >
-                </el-checkbox-group></el-col
+              ><template v-if="item.include">
+                <el-col :span="4">{{ item.name }}</el-col>
+                <el-col :span="20"
+                  ><el-checkbox-group v-model="item.star">
+                    <el-checkbox
+                      v-for="(item, index) in yuhunStarOptions"
+                      :key="index"
+                      :label="item.value"
+                      >{{ item.name }}</el-checkbox
+                    >
+                  </el-checkbox-group></el-col
+                ></template
               >
             </el-row>
           </el-form-item>
@@ -85,62 +87,130 @@
             </el-row>
             <el-row
               v-show="levelRadio == 2"
-              v-for="(item, index) in includeListView"
+              v-for="(item, index) in includeList"
               :key="index"
             >
-              <el-col :span="4">{{ item.name }}</el-col>
-              <el-col :span="4">{{
-                (item.level[0] != item.level[1] ? item.level[0] + "-" : "") +
-                item.level[1] +
-                "级"
-              }}</el-col>
-              <el-col :span="16">
-                <el-slider v-model="item.level" range show-stops :max="15">
-                </el-slider>
-              </el-col>
+              <template v-if="item.include">
+                <el-col :span="4">{{ item.name }}</el-col>
+                <el-col :span="4">{{
+                  (item.level[0] != item.level[1] ? item.level[0] + "-" : "") +
+                  item.level[1] +
+                  "级"
+                }}</el-col>
+                <el-col :span="16">
+                  <el-slider v-model="item.level" range show-stops :max="15">
+                  </el-slider>
+                </el-col>
+              </template>
             </el-row>
           </el-form-item>
           <el-form-item label="指定御魂">
-            <el-button
-              v-for="(item, index) in includeListView"
-              @click="selectYuhun(index)"
-              :key="index"
-              size="mini"
-              type="warning"
-              >{{ item.name }}</el-button
-            >
+            <template v-for="(item, index) in includeList">
+              <el-button
+                @click="yuhunSelect(item.value)"
+                :key="index"
+                size="mini"
+                type="warning"
+                :disabled="!item.include"
+                v-if="!item.entity"
+                >{{ item.name }}</el-button
+              >
+              <div
+                style="
+                  display: inline-block;
+                  width: 70px;
+                  height: 70px;
+                  position: relative;
+                  margin: 0 10px;
+                "
+                :key="index"
+                v-if="item.entity"
+              >
+                <el-badge
+                  :value="'+' + item.entity.myLevel"
+                  class="item"
+                  :type="item.entity.myLevel == 15 ? 'warning' : 'primary'"
+                >
+                  <el-image
+                    style="width: 70px; height: 70px"
+                    :src="require('../../assets/yuhun_border.png')"
+                    fit="cover"
+                    :style="degree(item.entity.pos)"
+                  ></el-image>
+                </el-badge>
+                <el-image
+                  style="
+                    width: 50px;
+                    height: 50px;
+                    position: absolute;
+                    left: 10px;
+                    top: 10px;
+                    z-index: 10;
+                  "
+                  :src="`http://localhost:8080/png/yuhun/${item.entity.suitId}.png`"
+                  fit="cover"
+                />
+              </div>
+            </template>
           </el-form-item>
         </el-form>
-        <div></div>
       </div>
     </el-popover>
+    <el-dialog :visible="pos != ''" :show-close="false" @click.stop>
+      <YuhunData
+        v-if="pos != ''"
+        @select-success="selectSuccess"
+        :outPos="pos"
+      />
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="pos = ''">取 消</el-button>
+        <el-button type="primary" @click="pos = ''">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import {
   tags,
-  includeList,
   yuhunStarOptions,
   excludeOptions,
 } from "../../assets/view_json/caculator";
+import YuhunData from "../../views/YuhunData";
+import { mapState, mapMutations } from "vuex";
 export default {
-  props: [],
+  components: {
+    YuhunData,
+  },
   data() {
     return {
       tags,
-      includeList,
       yuhunStarOptions,
       excludeOptions,
-      excludeList: [],
-      includeListView: [],
       starRadio: "1",
       levelRadio: "1",
       yuhunStarList: [],
       level: [15, 15],
+      current: 1,
+      size: 10,
+      pos: "",
+      excludeList: [],
     };
   },
+  computed: {
+    ...mapState(["gameShot", "user", "includeList"]),
+  },
+  created() {
+    this.changeStar();
+    this.changeLevel();
+  },
   methods: {
+    ...mapMutations(["setIncludeList"]),
+    degree(val) {
+      return {
+        transform: "rotate(" + val * -56 + "deg)",
+      };
+    },
     changeExclude() {
       if (this.excludeList.length > 0) {
         let name = "排除" + this.excludeList.join(",") + "号位";
@@ -148,9 +218,15 @@ export default {
       } else {
         this.tags.map((item) => item.type == 1 && (item.name = ""));
       }
-      this.includeListView = this.includeList.filter((item) => {
-        return !this.excludeList.some((val) => item.value == val);
+      this.includeList.forEach((item) => {
+        if (this.excludeList.includes(item.value)) {
+          item.include = false;
+        } else {
+          item.include = true;
+        }
+        return item;
       });
+      this.setIncludeList(this.includeList);
     },
     changeStarRadio() {
       if (this.starRadio == 2) {
@@ -161,14 +237,7 @@ export default {
         this.changeStar();
       }
     },
-    changeStar() {
-      if (this.yuhunStarList.length > 0) {
-        let name = "选定" + this.yuhunStarList.join(",") + "星";
-        this.tags.map((item) => item.type == 2 && (item.name = name));
-      } else {
-        this.tags.map((item) => item.type == 2 && (item.name = ""));
-      }
-    },
+
     changeLevelRadio() {
       if (this.levelRadio == 2) {
         this.tags.map(
@@ -178,6 +247,17 @@ export default {
         this.changeLevel();
       }
     },
+    changeStar() {
+      if (this.yuhunStarList.length > 0) {
+        let name = "选定" + this.yuhunStarList.join(",") + "星";
+        this.tags.map((item) => item.type == 2 && (item.name = name));
+        this.includeList.forEach((item) => (item.star = this.yuhunStarList));
+      } else {
+        this.tags.map((item) => item.type == 2 && (item.name = ""));
+        this.includeList.forEach((item) => (item.star = []));
+      }
+      this.setIncludeList(this.includeList);
+    },
     changeLevel() {
       let name =
         "选定" +
@@ -185,10 +265,29 @@ export default {
         this.level[1] +
         "级";
       this.tags.map((item) => item.type == 3 && (item.name = name));
+
+      this.includeList.forEach((item) => (item.level = this.level));
+      this.setIncludeList(this.includeList);
+    },
+    yuhunSelect(val) {
+      this.pos = parseInt(val);
+    },
+    selectSuccess(entity, pos) {
+      this.includeList[pos].entity = entity;
+      this.includeList[pos].include = false;
+      this.setIncludeList(this.includeList);
+      this.pos = "";
     },
   },
 };
 </script>
 
 <style>
+.item {
+  margin-top: 0;
+  margin-right: 0;
+}
+.el-badge__content.is-fixed {
+  right: 30px;
+}
 </style>

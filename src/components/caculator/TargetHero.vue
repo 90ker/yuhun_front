@@ -46,10 +46,11 @@ export default {
       heroStar: 6,
       heroList: [],
       heroKV: {},
+      heroId: "",
     };
   },
   computed: {
-    ...mapState(["gameShot", "user","heroId"]),
+    ...mapState(["gameShot", "user", "limitAttrList"]),
   },
   created() {
     heroData.map((item) => {
@@ -58,7 +59,7 @@ export default {
     this.getHeroPage();
   },
   methods: {
-    ...mapMutations(['setHeroId']),
+    ...mapMutations(["setHid", "setLimitAttrList"]),
     getHeroPage() {
       this.$axios
         .post(
@@ -73,22 +74,27 @@ export default {
         .then((res) => (this.heroList = res.data));
     },
     heroSelect() {
-      // let hero = this.heroList.filter((item) => item.heroId == this.heroId)[0];
-      // hero.attrsList.forEach((attr) =>
-      //   this.limitAttrList.forEach((item) => {
-      //     let type = item.type;
-      //     if (type == attr.name) {
-      //       if (type.includes("crit") || type.includes("Rate")) {
-      //         item.max = Math.round(attr.value * 100);
-      //       } else {
-      //         item.max = Math.round(attr.value);
-      //       }
-      //     }
-      //   })
-      // );
+      let hero = this.heroList.filter((item) => item.heroId == this.heroId)[0];
+      hero.attrsList.map((attr) =>
+        this.setLimitAttrList(
+          this.limitAttrList.map((item) => {
+            let type = item.type;
+            if (type == attr.name) {
+              if (type.includes("crit") || type.includes("Rate")) {
+                item.max = Math.round(attr.value * 100);
+              } else {
+                item.max = Math.round(attr.value);
+              }
+            }
+            return item;
+          })
+        )
+      );
+      this.$store.commit('setHid',hero.id)
     },
     changeSelect() {
-      this.setHeroId("")
+      this.$store.commit('setHid','')
+      this.heroId = ''
       this.getHeroPage();
     },
   },

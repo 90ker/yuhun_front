@@ -140,37 +140,49 @@ let includeList = [{
         name: "一号位",
         value: "1",
         star: [],
-        level: [15, 15]
+        level: [15, 15],
+        entity: '',
+        include : true
     },
     {
         name: "二号位",
         value: "2",
         star: [],
-        level: [15, 15]
+        level: [15, 15],
+        entity: '',
+        include : true
     },
     {
         name: "三号位",
         value: "3",
         star: [],
-        level: [15, 15]
+        level: [15, 15],
+        entity: '',
+        include : true
     },
     {
         name: "四号位",
         value: "4",
         star: [],
-        level: [15, 15]
+        level: [15, 15],
+        entity: '',
+        include : true
     },
     {
         name: "五号位",
         value: "5",
         star: [],
-        level: [15, 15]
+        level: [15, 15],
+        entity: '',
+        include : true
     },
     {
         name: "六号位",
         value: "6",
         star: [],
-        level: [15, 15]
+        level: [15, 15],
+        entity: '',
+        include : true
     },
 ]
 
@@ -191,106 +203,121 @@ let yuhunStarOptions = [{
 
 let yuhunSec = [{
         name: '攻击加成',
-        flag: 0
+        value: 1
     },
     {
         name: '生命加成',
-        flag: 0
+        value: 2
     },
     {
         name: '防御加成',
-        flag: 0
+        value: 3
     },
     {
         name: '速度',
-        flag: 0
+        value: 4
     }
 ]
 let yuhunFourth = [{
         name: '攻击加成',
-        flag: 0
+        value: 1
     },
     {
         name: '生命加成',
-        flag: 0
+        value: 2
     },
     {
         name: '防御加成',
-        flag: 0
+        value: 3
     },
     {
         name: '效果命中',
-        flag: 0
+        value: 4
     },
     {
         name: '效果抵抗',
-        flag: 0
+        value: 5
     }
 ]
 let yuhunSixth = [{
         name: '攻击加成',
-        flag: 0
+        value: 1
     },
     {
         name: '生命加成',
-        flag: 0
+        value: 2
     },
     {
         name: '防御加成',
-        flag: 0
+        value: 3
     },
     {
         name: '暴击率',
-        flag: 0
+        value: 4
     },
     {
         name: '暴击伤害',
-        flag: 0
+        value: 5
     }
 ]
 let yuhunSite = [{
     site: '二号位',
-    value: yuhunSec
+    obj: yuhunSec,
+    selects: []
 }, {
-    name: '四号位',
-    value: yuhunFourth
+    site: '四号位',
+    obj: yuhunFourth,
+    selects: []
 }, {
-    name: '六号位',
-    value: yuhunSixth
+    site: '六号位',
+    obj: yuhunSixth,
+    selects: []
 }]
 
-let target = [{
+let targets = [{
     target: '攻击',
-    flag: 0
+    value: 1
 }, {
     target: '生命',
-    flag: 0
+    value: 2
 }, {
     target: '防御',
-    flag: 0
+    value: 3
 }, {
     target: '暴击',
-    flag: 0
+    value: 4
 }, {
     target: '暴击伤害',
-    flag: 0
+    value: 5
 }, {
     target: '速度',
-    flag: 0
+    value: 6
 }, {
     target: '效果命中',
-    flag: 0
+    value: 7
 }, {
     target: '效果抵抗',
-    flag: 0
+    value: 8
 }]
 
-let tags=[
+let tags = [
     // 1:排除，2:星级，3:等级，4：指定
-    { type:1,name:''},
-    { type:2,name:''},
-    { type:3,name:''},
-    { type:4,name:''},
+    {
+        type: 1,
+        name: ''
+    },
+    {
+        type: 2,
+        name: ''
+    },
+    {
+        type: 3,
+        name: ''
+    },
+    {
+        type: 4,
+        name: ''
+    },
 ]
 
 export {
@@ -301,6 +328,6 @@ export {
     yuhunStarOptions,
     excludeOptions,
     yuhunSite,
-    target,
+    targets,
     tags
 };

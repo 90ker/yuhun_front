@@ -38,7 +38,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="位置">
+      <el-form-item label="位置" v-if="!outPos">
         <el-select v-model="pos" style="width: 100px" @change="handleSelect">
           <el-option
             v-for="item in posOptions"
@@ -91,7 +91,7 @@
           ></el-image>
         </template>
       </el-table-column>
-      <el-table-column label="御魂类型" width="100">
+      <el-table-column label="御魂类型" width="120">
         <template slot-scope="scope">
           <span style="color: red; margin-right: 5px">{{
             yuhunKV[scope.row.suitId]
@@ -177,6 +177,11 @@
           >{{ scope.row.attrs.Defense | round }}</template
         >
       </el-table-column>
+      <el-table-column label="" fixed="right" width="90" v-if="outPos">
+        <template slot-scope="scope">
+          <el-button @click="check(scope.row,pos)">选择</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <el-pagination
       @current-change="handleCurrentChange"
@@ -192,6 +197,7 @@
 import { mapState, mapMutations } from "vuex";
 import yuhunData from "../assets/EQUIP_SUIT_DATA.json";
 export default {
+  props: ["outPos"],
   data() {
     return {
       yuhunList: [],
@@ -202,7 +208,7 @@ export default {
       size: 10,
       quality: 0,
       level: 0,
-      pos: 6,
+      pos: this.outPos ? this.outPos - 1 : 6,
       suitId: 0,
       typeOptions: [
         {
@@ -314,6 +320,9 @@ export default {
     },
   },
   methods: {
+    check(item,pos) {
+      this.$emit("select-success", item,pos);
+    },
     degree(val) {
       return {
         transform: "rotate(" + val * -56 + "deg)",
@@ -332,7 +341,6 @@ export default {
       });
     },
     getAll() {
-      console.log("aaaa");
       return this.$axios
         .post(
           `http://localhost:8080/yuhun/num/${
@@ -368,7 +376,6 @@ export default {
     },
   },
   created() {
-    console.log("=====");
     yuhunData.map((item) => {
       this.yuhunKV[item.id] = item.name;
       let obj = {

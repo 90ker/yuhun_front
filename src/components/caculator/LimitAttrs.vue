@@ -8,7 +8,8 @@
             ><el-input-number
               :min="0"
               :max="100000"
-              v-model="item.max"
+              :value="item.max"
+              @input="setMax($event,index)"
               controls-position="right"
             ></el-input-number
           ></el-col>
@@ -16,7 +17,8 @@
             ><el-input-number
               :min="0"
               :max="100000"
-              v-model="item.min"
+              :value="item.min"
+              @input="setMin($event,index)"
               controls-position="right"
             ></el-input-number
           ></el-col>
@@ -27,14 +29,24 @@
 </template>
 
 <script>
-import { limitAttrList } from "../../assets/view_json/caculator";
+import { mapState } from "vuex";
 export default {
   data() {
-    return {
-      limitAttrList,
-    };
+    return {};
   },
-  methods: {},
+  computed: {
+    ...mapState(["limitAttrList"]),
+  },
+  methods: {
+    setMax(e,index){
+       this.limitAttrList[index].max = e
+       this.$store.commit('setLimitAttrList',this.limitAttrList)
+    },
+    setMin(e,index){
+      this.limitAttrList[index].min = e
+      this.$store.commit('setLimitAttrList',this.limitAttrList)
+    }
+  },
 };
 </script>
 

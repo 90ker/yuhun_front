@@ -49,7 +49,12 @@
           {{ heroKV[scope.row.heroId] }}
         </template>
       </el-table-column>
-      <el-table-column prop="rarity" label="稀有度" width="80">
+      <el-table-column label="稀有度" width="80">
+        <template slot-scope="scope"
+          ><el-image
+            :src="`http://localhost:8080/png/rarity/${scope.row.rarity}.png`"
+          ></el-image
+        ></template>
       </el-table-column>
       <el-table-column prop="star" label="星级" width="60"> </el-table-column>
       <el-table-column label="属性" width="80">
