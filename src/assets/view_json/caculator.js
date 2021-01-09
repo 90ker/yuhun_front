@@ -138,51 +138,51 @@ let limitAttrList = [{
 
 let includeList = [{
         name: "一号位",
-        value: "1",
+        pos: 0,
         star: [],
         level: [15, 15],
         entity: '',
-        include : true
+        include: true
     },
     {
         name: "二号位",
-        value: "2",
+        pos: 1,
         star: [],
         level: [15, 15],
         entity: '',
-        include : true
+        include: true
     },
     {
         name: "三号位",
-        value: "3",
+        pos: 2,
         star: [],
         level: [15, 15],
         entity: '',
-        include : true
+        include: true
     },
     {
         name: "四号位",
-        value: "4",
+        pos: 3,
         star: [],
         level: [15, 15],
         entity: '',
-        include : true
+        include: true
     },
     {
         name: "五号位",
-        value: "5",
+        pos: 4,
         star: [],
         level: [15, 15],
         entity: '',
-        include : true
+        include: true
     },
     {
         name: "六号位",
-        value: "6",
+        pos: 5,
         star: [],
         level: [15, 15],
         entity: '',
-        include : true
+        include: true
     },
 ]
 
@@ -262,14 +262,17 @@ let yuhunSixth = [{
 ]
 let yuhunSite = [{
     site: '二号位',
+    key: 2,
     obj: yuhunSec,
     selects: []
 }, {
     site: '四号位',
+    key: 4,
     obj: yuhunFourth,
     selects: []
 }, {
     site: '六号位',
+    key: 6,
     obj: yuhunSixth,
     selects: []
 }]

@@ -55,15 +55,40 @@ export default {
     CaculateTarget,
   },
   data() {
-    return {};
+    return {
+      socket: "",
+    };
+  },
+  computed: {
+    ...mapState([
+      "gameShot",
+      "user",
+      "hid",
+      "limitAttrList",
+      "yuhunSite",
+      "includeList",
+      "target"
+    ]),
   },
   methods: {
     startCaculate() {
-      this.$axios.post('http://localhost:8800/')
+      if (!this.socket) {
+        this.socket = new WebSocket("ws://localhost:8080/caculate/a");
+      }
+      // 实例化socket
+      // 监听socket消息
+      this.socket.onmessage = (msg) => {
+        console.log(msg.data);
+      };
+
+      let condition = this.includeList.filter((item) => item.include);
+      let attrsLimit =  this.limitAttrList
+      let targetObj = { sitesAddition: this.yuhunSite.map(item=>item.selects), target: this.target };
+      console.log(condition)
+      this.socket.onopen = () => {
+        this.socket.send(JSON.stringify({ condition, targetObj, attrsLimit }));
+      };
     },
-  },
-  computed: {
-    ...mapState(["gameShot", "user", "hid"]),
   },
 };
 </script>

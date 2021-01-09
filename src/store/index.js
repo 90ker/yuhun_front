@@ -7,21 +7,13 @@ import {
   includeList,
   yuhunSite,
 } from "../assets/view_json/caculator";
-const yuhunRange = {
-  state: () => ({}),
-  mutations: {},
-  actions: {},
-  getters: {}
-}
 
 export default new Vuex.Store({
-  modules: {
-    yuhunRange
-  },
   state: {
     gameShot: '',
     user: '',
     hid: '',
+    target: '',
     limitAttrList,
     yuhunSite,
     includeList,
@@ -45,8 +37,8 @@ export default new Vuex.Store({
     setIncludeList(state, includeList) {
       state.includeList = includeList
     },
-    // setExcludeList(state,excludeList){
-    //   state.excludeList = excludeList
-    // }
+    setTarget(state, target) {
+      state.target = target
+    }
   },
 })

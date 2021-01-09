@@ -23,7 +23,7 @@
                 ><el-checkbox
                   v-if="!item.entity"
                   :key="index"
-                  :label="item.value"
+                  :label="item.pos"
                   >{{ item.name }}</el-checkbox
                 ></template
               >
@@ -213,13 +213,14 @@ export default {
     },
     changeExclude() {
       if (this.excludeList.length > 0) {
-        let name = "排除" + this.excludeList.join(",") + "号位";
+        
+        let name = "排除" + this.excludeList.map(item=>item+1).join(",") + "号位";
         this.tags.map((item) => item.type == 1 && (item.name = name));
       } else {
         this.tags.map((item) => item.type == 1 && (item.name = ""));
       }
       this.includeList.forEach((item) => {
-        if (this.excludeList.includes(item.value)) {
+        if (this.excludeList.includes(item.pos)) {
           item.include = false;
         } else {
           item.include = true;
@@ -274,7 +275,6 @@ export default {
     },
     selectSuccess(entity, pos) {
       this.includeList[pos].entity = entity;
-      this.includeList[pos].include = false;
       this.setIncludeList(this.includeList);
       this.pos = "";
     },

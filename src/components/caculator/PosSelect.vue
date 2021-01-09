@@ -9,23 +9,14 @@
       >
         <el-row>
           <el-col :span="24">
-            <el-button type="success" size="mini" style="text-align: left"
-              >攻攻爆</el-button
-            >
-            <el-button type="success" size="mini" style="text-align: left"
-              >速攻爆</el-button
-            >
-            <el-button type="success" size="mini" style="text-align: left"
-              >生生爆</el-button
-            >
-            <el-button type="success" size="mini" style="text-align: left"
-              >生生生</el-button
-            >
-            <el-button type="success" size="mini" style="text-align: left"
-              >速命生</el-button
-            >
-            <el-button type="success" size="mini" style="text-align: left"
-              >速抗生</el-button
+            <el-button
+              type="success"
+              size="mini"
+              style="text-align: left"
+              v-for="(item, index) in quickSetOptions"
+              :key="index"
+              @click="quickSet(item.value)"
+              >{{ item.name }}</el-button
             >
           </el-col>
         </el-row>
@@ -41,12 +32,17 @@
           ><el-button
             size="mini"
             style="text-align: left; margin-right: 20px"
-            @click="selectAll(site,index)"
+            @click="selectAll(site, index)"
             >全选</el-button
           ></el-col
         >
         <el-col :span="16">
-          <el-checkbox-group size="mini" :value="site.selects" @change="setSelect($event,index)" v-model="site.selects">
+          <el-checkbox-group
+            size="mini"
+            :value="site.selects"
+            @change="setSelect($event, index)"
+            v-model="site.selects"
+          >
             <el-checkbox-button
               style="text-align: left"
               v-for="(item, idx) in site.obj"
@@ -62,17 +58,35 @@
 </template>
 
 <script>
-import {  mapState } from 'vuex';
+import { mapMutations, mapState } from "vuex";
 
 export default {
   data() {
-    return { };
+    return {
+      quickSetOptions: [
+        { name: "攻攻爆", value: [1, 1, 4, 5] },
+        { name: "速攻爆", value: [4, 1, 4, 5] },
+        { name: "生生爆", value: [2, 2, 4, 5] },
+        { name: "生生生", value: [2, 2, 2] },
+        { name: "速命生", value: [4, 4, 2] },
+        { name: "速抗生", value: [4, 5, 2] },
+      ],
+    };
   },
-  computed:{
-    ...mapState(['yuhunSite'])
+  computed: {
+    ...mapState(["yuhunSite"]),
   },
   methods: {
-    selectAll(site,index) {
+    ...mapMutations(["setYuhunSite"]),
+    quickSet(val) {
+      let [a, b, ...c] = val;
+      this.yuhunSite.map((item) => (item.selects = []));
+      this.yuhunSite[0].selects = [a];
+      this.yuhunSite[1].selects = [b];
+      this.yuhunSite[2].selects = [...c];
+      this.setYuhunSite(this.yuhunSite);
+    },
+    selectAll(site, index) {
       if (site.obj.every((item) => site.selects.includes(item.value))) {
         site.selects = [];
       } else {
@@ -82,13 +96,13 @@ export default {
           return site;
         });
       }
-      this.yuhunSite[index] = site
-      this.$store.commit('setYuhunSite',this.yuhunSite)
+      this.yuhunSite[index] = site;
+      this.setYuhunSite(this.yuhunSite);
     },
-    setSelect(e,index){
-      this.yuhunSite[index].selects = e 
-      this.$store.commit('setYuhunSite',this.yuhunSite)
-    }
+    setSelect(e, index) {
+      this.yuhunSite[index].selects = e;
+      this.setYuhunSite(this.yuhunSite);
+    },
   },
 };
 </script>
