@@ -81,9 +81,11 @@ export default {
             let type = item.type;
             if (type == attr.name) {
               if (type.includes("crit") || type.includes("Rate")) {
-                item.max = Math.round(attr.value * 100);
+                item.min = Math.round(attr.value * 100);
+                item.max = item.min + 100
               } else {
-                item.max = Math.round(attr.value);
+                item.min = Math.round(attr.value);
+                item.max = item.min + 40000
               }
             }
             return item;

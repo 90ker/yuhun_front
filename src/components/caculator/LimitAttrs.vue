@@ -6,7 +6,7 @@
           <el-col :span="6">{{ item.name }}</el-col>
           <el-col :span="9"
             ><el-input-number
-              :min="0"
+              :min="item.min"
               :max="100000"
               :value="item.max"
               @input="setMax($event,index)"
@@ -15,8 +15,8 @@
           ></el-col>
           <el-col :span="9"
             ><el-input-number
-              :min="0"
-              :max="100000"
+              :min="item.min"
+              :max="item.max"
               :value="item.min"
               @input="setMin($event,index)"
               controls-position="right"

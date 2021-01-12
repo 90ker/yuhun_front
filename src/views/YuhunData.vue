@@ -208,7 +208,7 @@ export default {
       size: 10,
       quality: 0,
       level: 0,
-      pos: this.outPos ? this.outPos - 1 : 6,
+      pos: this.outPos ? this.outPos : 6,
       suitId: 0,
       typeOptions: [
         {
@@ -376,6 +376,7 @@ export default {
     },
   },
   created() {
+    console.log(this.pos)
     yuhunData.map((item) => {
       this.yuhunKV[item.id] = item.name;
       let obj = {

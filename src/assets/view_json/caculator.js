@@ -65,73 +65,73 @@ let excludeOptions = [{
 let limitAttrList = [{
         name: "最终伤害",
         type: "damage",
-        max: 0,
+        max: 600000,
         min: 0
     },
     {
         name: "速度",
         type: "speed",
-        max: 0,
+        max: 500,
         min: 0
     },
     {
         name: "最终攻击",
         type: "attack",
-        max: 0,
+        max: 5000,
         min: 0
     },
     {
         name: "攻击加成",
         type: "attackRate",
-        max: 0,
+        max: 500,
         min: 0
     },
     {
         name: "暴击率",
         type: "critRate",
-        max: 0,
+        max: 110,
         min: 0
     },
     {
         name: "暴击加成",
         type: "critPower",
-        max: 0,
+        max: 400,
         min: 0
     },
     {
         name: "生命值",
         type: "hp",
-        max: 0,
+        max: 50000,
         min: 0
     },
     {
         name: "生命加成",
         type: "hpRate",
-        max: 0,
+        max: 500,
         min: 0
     },
     {
         name: "最终防御",
         type: "defense",
-        max: 0,
+        max: 5000,
         min: 0
     },
     {
         name: "防御加成",
         type: "defenseRate",
-        max: 0,
+        max: 500,
         min: 0
     },
     {
         name: "效果命中",
         type: "effectHitRate",
-        max: 0,
+        max: 100,
         min: 0,
     },
     {
         name: "效果抵抗",
         type: "effectResistRate",
-        max: 0,
+        max: 100,
         min: 0,
     },
 ]
@@ -203,104 +203,108 @@ let yuhunStarOptions = [{
 
 let yuhunSec = [{
         name: '攻击加成',
-        value: 1
+        type: 'AttackRate'
     },
     {
         name: '生命加成',
-        value: 2
+        type: 'HpRate'
     },
     {
         name: '防御加成',
-        value: 3
+        type: 'DefenseRate'
     },
     {
         name: '速度',
-        value: 4
+        type: 'Speed'
     }
 ]
 let yuhunFourth = [{
         name: '攻击加成',
-        value: 1
+        type: 'AttackRate'
     },
     {
         name: '生命加成',
-        value: 2
+        type: 'HpRate'
     },
     {
         name: '防御加成',
-        value: 3
+        type: 'DefenseRate'
     },
     {
         name: '效果命中',
-        value: 4
+        type: 'EffectHitRate'
     },
     {
         name: '效果抵抗',
-        value: 5
+        type: 'EffectResistRate'
     }
 ]
 let yuhunSixth = [{
         name: '攻击加成',
-        value: 1
+        type: 'AttackRate'
     },
     {
         name: '生命加成',
-        value: 2
+        type: 'HpRate'
     },
     {
         name: '防御加成',
-        value: 3
+        type: 'DefenseRate'
     },
     {
         name: '暴击率',
-        value: 4
+        type: 'CritRate'
     },
     {
         name: '暴击伤害',
-        value: 5
+        type: 'CritPower'
     }
 ]
 let yuhunSite = [{
     site: '二号位',
-    key: 2,
+    pos: 1,
     obj: yuhunSec,
     selects: []
 }, {
     site: '四号位',
-    key: 4,
+    pos: 3,
     obj: yuhunFourth,
     selects: []
 }, {
     site: '六号位',
-    key: 6,
+    pos: 5,
     obj: yuhunSixth,
     selects: []
 }]
 
 let targets = [{
+    target: '伤害',
+    value: 'damage'
+}, {
+
     target: '攻击',
-    value: 1
+    value: 'attack'
 }, {
     target: '生命',
-    value: 2
+    value: "hp"
 }, {
     target: '防御',
-    value: 3
+    value: "defense"
 }, {
     target: '暴击',
-    value: 4
+    value: "critRate"
 }, {
     target: '暴击伤害',
-    value: 5
+    value: "critPower"
 }, {
     target: '速度',
-    value: 6
+    value: "speed"
 }, {
     target: '效果命中',
-    value: 7
+    value: "effectHitRate"
 }, {
     target: '效果抵抗',
-    value: 8
+    value: "effectResistRate"
 }]
 
 let tags = [

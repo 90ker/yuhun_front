@@ -107,7 +107,7 @@
           <el-form-item label="指定御魂">
             <template v-for="(item, index) in includeList">
               <el-button
-                @click="yuhunSelect(item.value)"
+                @click="yuhunSelect(item.pos)"
                 :key="index"
                 size="mini"
                 type="warning"

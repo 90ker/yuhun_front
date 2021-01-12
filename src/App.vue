@@ -279,7 +279,6 @@ export default {
       );
     });
   },
-  destroyed() {},
 };
 </script>
 <style lang="scss">
