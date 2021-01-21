@@ -82,7 +82,7 @@ export default {
             if (type == attr.name) {
               if (type.includes("crit") || type.includes("Rate")) {
                 item.min = Math.round(attr.value * 100);
-                item.max = item.min + 100
+                item.max = item.min + 500
               } else {
                 item.min = Math.round(attr.value);
                 item.max = item.min + 40000

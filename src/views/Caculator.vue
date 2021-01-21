@@ -20,28 +20,132 @@
 
     <el-dialog title="结果" :visible.sync="showResult" width="80%">
       <el-table
-        :data="top"
+        :data="result"
         border
         fix
         stripe
         size="midium"
-        empty-text="请耐心等待。。。"
+        empty-text="请耐心等待..."
       >
-        <el-table-column property="damage" label="伤害"></el-table-column>
-        <el-table-column property="attack" label="攻击"></el-table-column>
-        <el-table-column property="critRate" label="暴击率"></el-table-column>
-        <el-table-column property="critPower" label="爆伤"></el-table-column>
-        <el-table-column property="speed" label="速度"></el-table-column>
-        <el-table-column property="defense" label="防御"></el-table-column>
-        <el-table-column property="hp" label="生命"></el-table-column>
-        <el-table-column
-          property="effectHitRate"
-          label="效果命中"
-        ></el-table-column>
-        <el-table-column
-          property="effectResistRate"
-          label="效果抵抗"
-        ></el-table-column>
+        <el-table-column type="expand">
+          <template slot-scope="scope">
+            <template v-for="(item, index) in scope.row.entity">
+              <div
+                style="
+                  display: inline-block;
+                  width: 140px;
+                  height: 70px;
+                  position: relative;
+                  margin: 0 10px;
+                  font-size: 12px;
+                "
+                :key="index"
+              >
+                <el-badge
+                  :value="'+' + item.myLevel"
+                  class="item"
+                  :type="item.myLevel == 15 ? 'warning' : 'primary'"
+                >
+                  <el-image
+                    style="width: 70px; height: 70px"
+                    :src="require('../assets/yuhun_border.png')"
+                    fit="cover"
+                    :style="degree(item.pos)"
+                  ></el-image>
+                </el-badge>
+                <el-image
+                  style="
+                    width: 50px;
+                    height: 50px;
+                    position: absolute;
+                    left: 10px;
+                    top: 10px;
+                    z-index: 10;
+                  "
+                  :src="`http://localhost:8080/png/yuhun/${item.suitId}.png`"
+                  fit="cover"
+                />
+                <div
+                  style="
+                    display: inline-block;
+                    padding: 10px;
+                    box-shadow: 0 0 3px 1px #ccc;
+                  "
+                >
+                  <div
+                    class="attrs"
+                    style="color: #fff; background-color: #000"
+                    v-for="(it, index, c) in item.baseAttr"
+                    :key="c"
+                  >
+                    <span>{{ index | toCN }}</span>
+                    <span>{{ it | round(index) }}</span>
+                  </div>
+                  <div
+                    class="attrs"
+                    v-for="(it, index) in item.attrs"
+                    :key="index"
+                  >
+                    <span>{{ index | toCN }}</span>
+                    <span>{{ it | round(index) }}</span>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </template>
+        </el-table-column>
+        <el-table-column label="伤害">
+          <template slot-scope="scope">
+            {{ scope.row.attrs.Damage }}
+          </template>
+        </el-table-column>
+        <el-table-column label="攻击">
+          <template slot-scope="scope">
+            {{ scope.row.attrs.Attack }}
+          </template>
+        </el-table-column>
+        <el-table-column label="暴击率">
+          <template slot-scope="scope">
+            {{ scope.row.attrs.CritRate }}
+          </template>
+        </el-table-column>
+        <el-table-column label="爆伤">
+          <template slot-scope="scope">
+            {{ scope.row.attrs.CritPower }}
+          </template>
+        </el-table-column>
+        <el-table-column label="速度">
+          <template slot-scope="scope">
+            {{ scope.row.attrs.Speed }}
+          </template>
+        </el-table-column>
+        <el-table-column label="防御">
+          <template slot-scope="scope">
+            {{ scope.row.attrs.Defense }}
+          </template>
+        </el-table-column>
+        <el-table-column label="生命"
+          ><template slot-scope="scope">
+            {{ scope.row.attrs.Hp }}
+          </template></el-table-column
+        >
+        <el-table-column label="效果命中"
+          ><template slot-scope="scope">
+            {{ scope.row.attrs.EffectHitRate }}
+          </template></el-table-column
+        >
+        <el-table-column label="效果抵抗"
+          ><template slot-scope="scope">
+            {{ scope.row.attrs.EffectResistRate }}
+          </template></el-table-column
+        >
+        <el-table-column fixed="right" label="操作" width="100">
+          <template slot-scope="scope">
+            <el-button @click="collect(scope.row)" type="text" size="small"
+              >收藏</el-button
+            >
+          </template>
+        </el-table-column>
       </el-table>
     </el-dialog>
     <div
@@ -84,7 +188,7 @@ export default {
   data() {
     return {
       socket: "",
-      top: [],
+      result: [],
       showResult: false,
     };
   },
@@ -106,6 +210,12 @@ export default {
     });
   },
   methods: {
+    degree(val) {
+      return {
+        transform: "rotate(" + val * -56 + "deg)",
+      };
+    },
+
     startCaculate() {
       this.showResult = true;
       if (!this.socket) {
@@ -118,17 +228,17 @@ export default {
       // 实例化socket
       // 监听socket消息
       this.socket.onmessage = (msg) => {
-        let top = JSON.parse(msg.data).top;
-        if (top && top.length > 0) {
-          this.top =  top.map((item) => {
-            for (let i in item) {
-               if (i.includes("crit") || i.includes("Rate")) {
-                item[i] =  Math.round(item[i] * 100);
+        let result = JSON.parse(msg.data).result;
+        if (result && result.length > 0) {
+          this.result = result.map((item) => {
+            for (let i in item.attrs) {
+              if (i.includes("Crit") || i.includes("Rate")) {
+                item.attrs[i] = Math.round(item.attrs[i] * 100);
               } else {
-                item[i] = Math.round(item[i]);
+                item.attrs[i] = Math.round(item.attrs[i]);
               }
             }
-            return item
+            return item;
           });
         }
       };
@@ -145,15 +255,23 @@ export default {
         this.socket.send(
           JSON.stringify({ condition, sitesAddition, attrsLimit, target, hid })
         );
+        this.socket.send(JSON.stringify("a"));
       };
     },
+    collect() {},
   },
 };
 </script>
-<style lang="sass" scoped>
-.popover-contetn
-  border-top: 1px solid rgb(201, 201, 201)
-  padding-right: 0px
-  display: flex
-  flex-direction: column
+<style lang="scss" scoped>
+.popover-contetn {
+  border: 1px solid rgb(201, 201, 201);
+  padding-right: 0px;
+  display: flex;
+  flex-direction: column;
+}
+
+.attrs {
+  display: flex;
+  justify-content: space-between;
+}
 </style>

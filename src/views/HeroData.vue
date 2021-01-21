@@ -160,40 +160,6 @@ export default {
       size: 10,
     };
   },
-  filters: {
-    toCN(val) {
-      switch (val) {
-        case "speed":
-          return "速度";
-        case "hp":
-          return "生命";
-        case "attack":
-          return "攻击";
-        case "critRate":
-          return "暴击率";
-        case "critPower":
-          return "暴击加成";
-        case "defense":
-          return "防御";
-      }
-    },
-    roundPer(val) {
-      let newVal = Math.round(val * 100);
-      if (newVal) {
-        return "+" + newVal + "%";
-      } else {
-        return "";
-      }
-    },
-    round(val) {
-      let newVal = Math.round(val);
-      if (newVal) {
-        return "+" + newVal;
-      } else {
-        return "";
-      }
-    },
-  },
   methods: {
     handleSelect() {
       this.current = 1;
