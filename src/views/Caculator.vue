@@ -190,6 +190,7 @@ export default {
       socket: "",
       result: [],
       showResult: false,
+      interval: null,
     };
   },
   computed: {
@@ -216,6 +217,38 @@ export default {
       };
     },
 
+    onmessage(msg) {
+      let result = JSON.parse(msg.data).result;
+      if (result && result.length > 0) {
+        this.result = result.map((item) => {
+          for (let i in item.attrs) {
+            if (i.includes("Crit") || i.includes("Rate")) {
+              item.attrs[i] = Math.round(item.attrs[i] * 100);
+            } else {
+              item.attrs[i] = Math.round(item.attrs[i]);
+            }
+          }
+          return item;
+        });
+      }
+    },
+    onopen() {
+      let condition = this.includeList.filter((item) => item.include);
+      let sitesAddition = this.yuhunSite.map((item) => ({
+        selects: item.selects,
+        pos: item.pos,
+      }));
+      let attrsLimit = this.limitAttrList;
+      let target = this.target;
+      let hid = this.hid;
+      this.socket.send(
+        JSON.stringify({ condition, sitesAddition, attrsLimit, target, hid })
+      );
+
+      this.interval = setInterval(() => {
+        this.socket.send('getResult');
+      }, 2000);
+    },
     startCaculate() {
       this.showResult = true;
       if (!this.socket) {
@@ -225,40 +258,9 @@ export default {
           }/${this.gameShot.name}`
         );
       }
-      // 实例化socket
-      // 监听socket消息
-      this.socket.onmessage = (msg) => {
-        let result = JSON.parse(msg.data).result;
-        if (result && result.length > 0) {
-          this.result = result.map((item) => {
-            for (let i in item.attrs) {
-              if (i.includes("Crit") || i.includes("Rate")) {
-                item.attrs[i] = Math.round(item.attrs[i] * 100);
-              } else {
-                item.attrs[i] = Math.round(item.attrs[i]);
-              }
-            }
-            return item;
-          });
-        }
-      };
-
-      let condition = this.includeList.filter((item) => item.include);
-      let sitesAddition = this.yuhunSite.map((item) => ({
-        selects: item.selects,
-        pos: item.pos,
-      }));
-      let attrsLimit = this.limitAttrList;
-      let target = this.target;
-      let hid = this.hid;
-      this.socket.onopen = () => {
-        this.socket.send(
-          JSON.stringify({ condition, sitesAddition, attrsLimit, target, hid })
-        );
-        this.socket.send(JSON.stringify("a"));
-      };
+      this.socket.onmessage = this.onmessage;
+      this.socket.onopen = this.onopen;
     },
-    collect() {},
   },
 };
 </script>
