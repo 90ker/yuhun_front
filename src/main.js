@@ -10,9 +10,12 @@ import router from './router'
 import store from './store'
 import axios from 'axios'
 
+axios.defaults.baseURL= process.env.NODE_ENV=== "production" ? "http://101.201.121.40:8080" : "http://localhost:8080";
 Vue.prototype.$axios = axios
 Vue.config.productionTip = false
 Vue.use(ElementUI);
+
+
 Vue.filter('toCN', (val) => {
   switch (val.toLowerCase()) {
     case "speed":
@@ -48,6 +51,8 @@ Vue.filter('round', (val, index) => {
     return "+" + Math.round(val);
   }
 })
+
+
 
 Vue.component(CollapseTransition.name, CollapseTransition)
 new Vue({

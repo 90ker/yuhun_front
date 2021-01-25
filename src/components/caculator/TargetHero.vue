@@ -63,7 +63,7 @@ export default {
     getHeroPage() {
       this.$axios
         .post(
-          `http://localhost:8080/hero/page/${
+          `/hero/page/${
             this.user.username || sessionStorage.getItem("username")
           }/${this.gameShot.name}`,
           {

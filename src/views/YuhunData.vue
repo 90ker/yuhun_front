@@ -343,7 +343,7 @@ export default {
     getAll() {
       return this.$axios
         .post(
-          `http://localhost:8080/yuhun/num/${
+          `/yuhun/num/${
             this.user.username || sessionStorage.getItem("username")
           }/${this.gameShot.name}`,
           {
@@ -359,7 +359,7 @@ export default {
       this.loading = true;
       this.$axios
         .post(
-          `http://localhost:8080/yuhun/page/${
+          `/yuhun/page/${
             this.user.username || sessionStorage.getItem("username")
           }/${this.gameShot.name}`,
           {

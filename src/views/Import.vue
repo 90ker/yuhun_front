@@ -77,7 +77,7 @@ export default {
     if (this.user) {
       if (!this.gameShots) {
         this.$axios
-          .get(`http://localhost:8080/gameshot/${this.user.username}`)
+          .get(`/gameshot/${this.user.username}`)
           .then((res) => (this.gameShots = res.data));
       }
     }
@@ -91,10 +91,10 @@ export default {
     },
     deleteGameShot(shotName) {
       this.$axios
-        .delete(`http://localhost:8080/gameshot/${this.user.username}/${shotName}`)
+        .delete(`/gameshot/${this.user.username}/${shotName}`)
         .then((resp) =>
           this.$axios
-            .get(`http://localhost:8080/gameshot/${this.user.username}`)
+            .get(`/gameshot/${this.user.username}`)
             .then((res) => (this.gameShots = res.data))
         );
     },

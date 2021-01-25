@@ -215,7 +215,7 @@ export default {
           password: this.loginForm.password,
         };
         this.$axios
-          .get("http://localhost:8080/user/login", {
+          .get("/user/login", {
             params,
           })
           .then((res) => {
@@ -233,7 +233,7 @@ export default {
           password: this.registryForm.password,
         };
         this.$axios
-          .get("http://localhost:8080/user/registry", {
+          .get("/user/registry", {
             params,
           })
           .then((res) => {
@@ -252,7 +252,7 @@ export default {
           newPass: this.changePassForm.password,
         };
         this.$axios
-          .get("http://localhost:8080/user/changePass", {
+          .get("/user/changePass", {
             params,
           })
           .then((res) => {
