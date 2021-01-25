@@ -246,14 +246,18 @@ export default {
       );
 
       this.interval = setInterval(() => {
-        this.socket.send('getResult');
+        this.socket.send("getResult");
       }, 2000);
     },
     startCaculate() {
       this.showResult = true;
       if (!this.socket) {
         this.socket = new WebSocket(
-          `ws://localhost:8080/caculate/${
+          `ws://${
+            process.env.NODE_ENV === "production"
+              ? "101.201.121.40"
+              : "localhost"
+          }:8080/caculate/${
             this.user.username || sessionStorage.getItem("username")
           }/${this.gameShot.name}`
         );
